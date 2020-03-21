@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "ES2017",
+        "declaration": false,
+        "jsx": "react",
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "outDir": "public"
+    },
+    "exclude": [
+        "node_modules",
+        "public"
+    ]
+}
