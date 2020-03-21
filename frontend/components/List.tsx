@@ -46,6 +46,7 @@ export const List: React.FC<ListProps> = function List({ index, setIndex, saved,
                     onClick={() => setIndex(i)}
                 />
             ))}
+            <pre>{imageUrls.join("\n")}</pre>
         </div>
     );
 };

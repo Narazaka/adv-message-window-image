@@ -14,7 +14,11 @@ export async function getImageUrls() {
             imageRef(i)
                 .getDownloadURL()
                 .then(
-                    url => url,
+                    url => {
+                        const urlp = new URL(url);
+                        urlp.searchParams.delete("token");
+                        return urlp.toString();
+                    },
                     error => {
                         // eslint-disable-next-line no-console
                         console.error(error);
