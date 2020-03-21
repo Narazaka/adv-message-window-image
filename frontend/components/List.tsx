@@ -8,8 +8,8 @@ const container: React.CSSProperties = {
 
 const imageStyle: React.CSSProperties = {
     border: "4px solid #ffffff",
-    width: "300px",
-    height: "75px",
+    width: "320px",
+    height: "80px",
     margin: "2px",
 };
 
