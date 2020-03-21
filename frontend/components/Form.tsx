@@ -13,6 +13,12 @@ const saveStyle: React.CSSProperties = {
     border: "none",
 };
 
+const disableStyle: React.CSSProperties = {
+    color: "#ffffff",
+    background: "#cccccc",
+    border: "none",
+};
+
 const applyStyle: React.CSSProperties = {
     color: "#ffffff",
     background: "#00cccc",
@@ -83,7 +89,12 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
                 テキストから画像を生成
             </button>
             <br />
-            <button type="button" style={saveStyle} disabled={!imageUrl || trySave} onClick={() => setTrySave(true)}>
+            <button
+                type="button"
+                style={!imageUrl || trySave ? disableStyle : saveStyle}
+                disabled={!imageUrl || trySave}
+                onClick={() => setTrySave(true)}
+            >
                 {index + 1}番目に上書き保存
             </button>
         </div>

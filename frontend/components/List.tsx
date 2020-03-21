@@ -11,6 +11,7 @@ const imageStyle: React.CSSProperties = {
     width: "320px",
     height: "80px",
     margin: "2px",
+    cursor: "pointer",
 };
 
 const selectedImage: React.CSSProperties = {
