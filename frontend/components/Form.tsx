@@ -84,7 +84,7 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
             </button>
             <br />
             <button type="button" style={saveStyle} disabled={!imageUrl || trySave} onClick={() => setTrySave(true)}>
-                {index + 1}番目に保存
+                {index + 1}番目に上書き保存
             </button>
         </div>
     );
