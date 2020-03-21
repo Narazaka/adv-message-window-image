@@ -7,6 +7,18 @@ const imageStyle: React.CSSProperties = {
     maxWidth: "100%",
 };
 
+const saveStyle: React.CSSProperties = {
+    color: "#ffffff",
+    background: "#ff0000",
+    border: "none",
+};
+
+const applyStyle: React.CSSProperties = {
+    color: "#ffffff",
+    background: "#00cccc",
+    border: "none",
+};
+
 const gen = new GenerateMessageWindow();
 
 export interface FormProps {
@@ -21,12 +33,13 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
     const [image, setImage] = React.useState<Jimp | undefined>();
     const [imageUrl, setImageUrl] = React.useState<string | undefined>();
     const [trySave, setTrySave] = React.useState(false);
+    const [apply, setApply] = React.useState(false);
     React.useEffect(() => {
         gen.load().then(() => setLoaded(true));
     }, []);
-    React.useEffect(() => {
+    /* React.useEffect(() => {
         if (gen.loaded) setImage(gen.generate(name, body));
-    }, [name, body]);
+    }, [name, body]); */
     React.useEffect(() => {
         if (image) {
             image.getBase64Async("image/png").then(img => setImageUrl(img));
@@ -45,6 +58,14 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
                 });
         }
     }, [trySave]);
+    React.useEffect(() => {
+        if (apply) {
+            if (gen.loaded) {
+                setImage(gen.generate(name, body));
+                setApply(false);
+            }
+        }
+    }, [apply]);
 
     if (!loaded) return <div>LOADING...</div>;
 
@@ -57,8 +78,13 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
             </div>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             {imageUrl && <img src={imageUrl} style={imageStyle} />}
-            <button type="button" disabled={!imageUrl || trySave} onClick={() => setTrySave(true)}>
-                保存
+            <br />
+            <button type="button" style={applyStyle} disabled={apply} onClick={() => setApply(true)}>
+                テキストから画像を生成
+            </button>
+            <br />
+            <button type="button" style={saveStyle} disabled={!imageUrl || trySave} onClick={() => setTrySave(true)}>
+                {index + 1}番目に保存
             </button>
         </div>
     );
