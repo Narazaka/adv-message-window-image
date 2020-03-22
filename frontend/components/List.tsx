@@ -7,7 +7,7 @@ const container: React.CSSProperties = {
 };
 
 const imageStyle: React.CSSProperties = {
-    border: "4px solid #ffffff",
+    border: "5px solid #ffffff",
     width: "320px",
     height: "80px",
     margin: "2px",
@@ -16,7 +16,7 @@ const imageStyle: React.CSSProperties = {
 
 const selectedImage: React.CSSProperties = {
     ...imageStyle,
-    border: "4px solid #00bbff",
+    border: "5px solid #00bbff",
 };
 
 export interface ListProps {
