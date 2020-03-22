@@ -28,14 +28,16 @@ export interface ListProps {
 
 export const List: React.FC<ListProps> = function List({ index, setIndex, saved, resetSaved }) {
     const [imageUrls, setImageUrls] = React.useState<string[]>([]);
-    const keyOffset = React.useRef(new Date().getTime());
+    const [keyOffset, setKeyOffset] = React.useState(new Date().getTime());
+    React.useEffect(() => {
+        getImageUrls().then(urls => {
+            setImageUrls(urls);
+        });
+    }, []);
     React.useEffect(() => {
         if (saved) {
             resetSaved();
-            getImageUrls().then(urls => {
-                keyOffset.current = new Date().getTime();
-                setImageUrls(urls);
-            });
+            setKeyOffset(new Date().getTime());
         }
     }, [saved]);
 
@@ -45,7 +47,7 @@ export const List: React.FC<ListProps> = function List({ index, setIndex, saved,
                 // eslint-disable-next-line jsx-a11y/alt-text, jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
                 <img
                     // eslint-disable-next-line react/no-array-index-key
-                    key={keyOffset.current + i}
+                    key={keyOffset + i}
                     src={imageUrl}
                     style={i === index ? selectedImage : imageStyle}
                     onClick={() => setIndex(i)}

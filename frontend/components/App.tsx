@@ -4,7 +4,7 @@ import { List } from "./List";
 
 export const App: React.FC = function App() {
     const [index, setIndex] = React.useState(0);
-    const [saved, setSaved] = React.useState(true);
+    const [saved, setSaved] = React.useState(false);
 
     return (
         <div>
