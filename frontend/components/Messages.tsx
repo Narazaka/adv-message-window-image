@@ -95,7 +95,8 @@ export const Messages: React.FC<MessagesProps> = function Messages({ user, saved
                                         disabled={!!tryDelete}
                                         color="red"
                                         type="button"
-                                        onClick={() => setTryDelete(message.id)}
+                                        // eslint-disable-next-line no-restricted-globals, no-alert
+                                        onClick={() => confirm("本当に削除しますか？") && setTryDelete(message.id)}
                                     >
                                         削除
                                     </Button>
