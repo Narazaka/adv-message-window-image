@@ -42,7 +42,7 @@ export const ImageList: React.FC<ImageListProps> = function ImageList({ index, s
                         // eslint-disable-next-line react/no-array-index-key
                         key={keyOffset + i}
                         label={{ floating: true, content: `${i + 1}`, color: i === index ? "blue" : undefined }}
-                        src={imageUrl}
+                        src={`${imageUrl}&dummy=${keyOffset + i}`}
                         style={i === index ? selectedImage : imageStyle}
                         onClick={() => setIndex(i)}
                     />
