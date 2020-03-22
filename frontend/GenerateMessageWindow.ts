@@ -1,15 +1,10 @@
 import * as Jimp from "jimp";
 import { Font } from "@jimp/plugin-print";
+import { Configuration } from "./Configuration";
 
 // eslint-disable-next-line import/prefer-default-export
 export class GenerateMessageWindow {
-    static baseX = 40;
-
-    static nameY = 10;
-
-    static bodyY = 70;
-
-    static maxWidth = 940;
+    config: Configuration;
 
     base!: Jimp;
 
@@ -19,14 +14,19 @@ export class GenerateMessageWindow {
 
     loaded = false;
 
+    constructor(config: Configuration) {
+        this.config = config;
+    }
+
     async load() {
+        if (this.loaded) return;
         await this.loadBase();
         await this.loadFont();
         this.loaded = true;
     }
 
     private async loadBase() {
-        this.base = await Jimp.read("./message-window.png");
+        this.base = await Jimp.read(this.config.baseImages[0]);
     }
 
     private async loadFont() {
@@ -38,26 +38,31 @@ export class GenerateMessageWindow {
         return this.base.clone();
     }
 
-    generate(name: string, body: string) {
+    generate(values: string[]) {
         const canvas = this.cloneBase();
-        canvas.print(this.font, GenerateMessageWindow.baseX, GenerateMessageWindow.nameY, name);
-        let x = 0;
-        let y = 0;
-        for (let i = 0; i < body.length; ++i) {
-            const char = body[i];
-            if (char === "\n") {
-                x = 0;
-                y += this.fontHeight;
-                // eslint-disable-next-line no-continue
-                continue;
+        for (let j = 0; j < this.config.values.length; ++j) {
+            const valueConfig = this.config.values[j];
+            const value = values[j];
+            // eslint-disable-next-line no-continue
+            if (!value) continue;
+            let x = 0;
+            let y = 0;
+            for (let i = 0; i < value.length; ++i) {
+                const char = value[i];
+                if (char === "\n") {
+                    x = 0;
+                    y += this.fontHeight;
+                    // eslint-disable-next-line no-continue
+                    continue;
+                }
+                const width = Jimp.measureText(this.font, char);
+                if (x + width > valueConfig.maxWidth) {
+                    x = 0;
+                    y += this.fontHeight;
+                }
+                canvas.print(this.font, valueConfig.origin.x + x, valueConfig.origin.y + y, char);
+                x += width;
             }
-            const width = Jimp.measureText(this.font, char);
-            if (x + width > GenerateMessageWindow.maxWidth) {
-                x = 0;
-                y += this.fontHeight;
-            }
-            canvas.print(this.font, GenerateMessageWindow.baseX + x, GenerateMessageWindow.bodyY + y, char);
-            x += width;
         }
         return canvas;
     }

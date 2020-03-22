@@ -1,15 +1,9 @@
 import * as React from "react";
+import { Grid, Image } from "semantic-ui-react";
 import { getImageUrls } from "../ImageStorage";
-
-const container: React.CSSProperties = {
-    display: "block",
-    margin: "1em",
-};
 
 const imageStyle: React.CSSProperties = {
     border: "5px solid #ffffff",
-    width: "320px",
-    height: "80px",
     margin: "2px",
     cursor: "pointer",
 };
@@ -19,14 +13,13 @@ const selectedImage: React.CSSProperties = {
     border: "5px solid #00bbff",
 };
 
-export interface ListProps {
+export interface ImageListProps {
     index: number;
     setIndex: (value: number) => any;
     saved: boolean;
-    resetSaved: () => any;
 }
 
-export const List: React.FC<ListProps> = function List({ index, setIndex, saved, resetSaved }) {
+export const ImageList: React.FC<ImageListProps> = function ImageList({ index, setIndex, saved }) {
     const [imageUrls, setImageUrls] = React.useState<string[]>([]);
     const [keyOffset, setKeyOffset] = React.useState(new Date().getTime());
     React.useEffect(() => {
@@ -36,24 +29,24 @@ export const List: React.FC<ListProps> = function List({ index, setIndex, saved,
     }, []);
     React.useEffect(() => {
         if (saved) {
-            resetSaved();
             setKeyOffset(new Date().getTime());
         }
     }, [saved]);
 
     return (
-        <div style={container}>
+        <Grid columns={3} doubling stackable>
             {imageUrls.map((imageUrl, i) => (
-                // eslint-disable-next-line jsx-a11y/alt-text, jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
-                <img
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={keyOffset + i}
-                    src={imageUrl}
-                    style={i === index ? selectedImage : imageStyle}
-                    onClick={() => setIndex(i)}
-                />
+                // eslint-disable-next-line react/no-array-index-key
+                <Grid.Column key={keyOffset + i}>
+                    <Image
+                        label={{ floating: true, content: `${i + 1}`, color: i === index ? "blue" : undefined }}
+                        src={imageUrl}
+                        style={i === index ? selectedImage : imageStyle}
+                        onClick={() => setIndex(i)}
+                    />
+                </Grid.Column>
             ))}
             <pre>{imageUrls.join("\n")}</pre>
-        </div>
+        </Grid>
     );
 };
