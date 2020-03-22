@@ -7,6 +7,8 @@ import { AccountButton } from "./AccountButton";
 import { Messages } from "./Messages";
 import { ImageGenerateForm } from "./ImageGenerateForm";
 
+const worldUrl = "vrchat://launch?ref=vrchat.com&id=wrld_61996a4b-c96c-4688-bc98-39224491a8b0:0";
+
 export const App: React.FC = function App() {
     const [values, setValues] = React.useState<string[]>([]);
     const setValue = React.useCallback(
@@ -27,6 +29,9 @@ export const App: React.FC = function App() {
     return (
         <Container>
             <Header as="h1">ADVメッセージウインドウ画像メーカー</Header>
+            <p>
+                VRChatワールド <a href={worldUrl}>美少女ゲームツクール2020 ⁄ ADV-MAKER 2020</a> に表示されます。
+            </p>
             <AccountButton user={user} setUser={setUser} />
             {!!user && (
                 <>
