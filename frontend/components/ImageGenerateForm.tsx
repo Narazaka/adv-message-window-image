@@ -57,7 +57,12 @@ export const ImageGenerateForm: React.FC<ImageGenerateFormProps> = function Imag
                 <Loader>Loading</Loader>
             </Dimmer>
             <Form>
-                <Button primary type="button" disabled={!imageUrl || trySave} onClick={() => setTrySave(true)}>
+                <Button
+                    primary
+                    type="button"
+                    disabled={!imageUrl || trySave || values.every(value => !value)}
+                    onClick={() => setTrySave(true)}
+                >
                     {index + 1}番目に上書き保存
                 </Button>
                 {imageUrl && <Image fluid src={imageUrl} />}
