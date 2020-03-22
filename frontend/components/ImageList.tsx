@@ -37,8 +37,10 @@ export const ImageList: React.FC<ImageListProps> = function ImageList({ index, s
         <Grid columns={3} doubling stackable>
             {imageUrls.map((imageUrl, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Grid.Column key={keyOffset + i}>
+                <Grid.Column key={i}>
                     <Image
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={keyOffset + i}
                         label={{ floating: true, content: `${i + 1}`, color: i === index ? "blue" : undefined }}
                         src={imageUrl}
                         style={i === index ? selectedImage : imageStyle}
