@@ -2,7 +2,7 @@ import { Configuration } from "./Configuration";
 
 export const config: Configuration = {
     baseImages: ["./message-window.png"],
-    imageCount: 10,
+    imageCount: 40,
     values: [
         {
             type: "text",
