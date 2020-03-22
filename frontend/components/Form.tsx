@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as Jimp from "jimp";
+import { useDebounce } from "use-debounce";
 import { GenerateMessageWindow } from "../GenerateMessageWindow";
 import { saveImage } from "../ImageStorage";
 
@@ -19,12 +20,6 @@ const disableStyle: React.CSSProperties = {
     border: "none",
 };
 
-const applyStyle: React.CSSProperties = {
-    color: "#ffffff",
-    background: "#00cccc",
-    border: "none",
-};
-
 const gen = new GenerateMessageWindow();
 
 export interface FormProps {
@@ -36,16 +31,17 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
     const [loaded, setLoaded] = React.useState(false);
     const [name, setName] = React.useState("");
     const [body, setBody] = React.useState("");
+    const [useName] = useDebounce(name, 400);
+    const [useBody] = useDebounce(body, 400);
     const [image, setImage] = React.useState<Jimp | undefined>();
     const [imageUrl, setImageUrl] = React.useState<string | undefined>();
     const [trySave, setTrySave] = React.useState(false);
-    const [apply, setApply] = React.useState(false);
     React.useEffect(() => {
         gen.load().then(() => setLoaded(true));
     }, []);
-    /* React.useEffect(() => {
-        if (gen.loaded) setImage(gen.generate(name, body));
-    }, [name, body]); */
+    React.useEffect(() => {
+        if (gen.loaded) setImage(gen.generate(useName, useBody));
+    }, [useName, useBody]);
     React.useEffect(() => {
         if (image) {
             image.getBase64Async("image/png").then(img => setImageUrl(img));
@@ -64,14 +60,6 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
                 });
         }
     }, [trySave]);
-    React.useEffect(() => {
-        if (apply) {
-            if (gen.loaded) {
-                setImage(gen.generate(name, body));
-                setApply(false);
-            }
-        }
-    }, [apply]);
 
     if (!loaded) return <div>LOADING...</div>;
 
@@ -84,10 +72,6 @@ export const Form: React.FC<FormProps> = function Form({ index, onSaved }) {
             </div>
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             {imageUrl && <img src={imageUrl} style={imageStyle} />}
-            <br />
-            <button type="button" style={applyStyle} disabled={apply} onClick={() => setApply(true)}>
-                テキストから画像を生成
-            </button>
             <br />
             <button
                 type="button"
