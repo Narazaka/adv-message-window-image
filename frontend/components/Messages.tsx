@@ -9,7 +9,7 @@ export interface MessagesProps {
     imageStorage: ImageStorage;
 }
 
-const pagePer = 12;
+const pagePer = 9;
 
 export const Messages: React.FC<MessagesProps> = function Messages({ user, saved, setValues, imageStorage }) {
     const [filterMine, toggleFilterMine] = React.useReducer((prev: boolean) => !prev, false);
@@ -76,7 +76,7 @@ export const Messages: React.FC<MessagesProps> = function Messages({ user, saved
                                     <p key={i}>{value}</p>
                                 ))}
                                 <Button primary type="button" onClick={() => setValues(message.values)}>
-                                    適用
+                                    反映
                                 </Button>
                                 {user.uid === message.uid && (
                                     <Button
