@@ -17,18 +17,39 @@ export interface Message {
 export type MessageSnapshot = firebase.firestore.QueryDocumentSnapshot<StoredMessage>;
 
 export interface ImagesInfo {
-    [id: string]: number;
+    [id: string]: ImageInfo;
 }
 
-export interface ImageInfo {
+export interface StoredImageInfo {
+    values: { [index: string]: string };
     t: firebase.firestore.Timestamp;
 }
 
-export type ImageSnapshot = firebase.firestore.QueryDocumentSnapshot<ImageInfo>;
+export interface ImageInfo {
+    values: string[];
+    t: number;
+}
+
+export type ImageSnapshot = firebase.firestore.QueryDocumentSnapshot<StoredImageInfo>;
 
 async function sha256(data: string) {
     const hashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data));
     return Buffer.from(hashBuffer).toString("hex");
+}
+
+function arrayToHash(values: string[]) {
+    return values.reduce(
+        (valuesHash, value, i) => ({ ...valuesHash, [i]: value || "" }),
+        {} as { [index: string]: string },
+    );
+}
+
+function hashToArray(data: { [index: string]: string }, count: number) {
+    const values = [];
+    for (let i = 0; i < count; ++i) {
+        values[i] = data[i];
+    }
+    return values;
 }
 
 export class ImageStorage {
@@ -67,13 +88,34 @@ export class ImageStorage {
         );
     }
 
-    listenImages(listener: (info: ImagesInfo) => any) {
+    private convertImageInfo(doc: ImageSnapshot) {
+        const data = doc.data();
+        return {
+            t: data.t.seconds,
+            values: hashToArray(data.values || {}, this.config.values.length),
+        };
+    }
+
+    listenImages(listener: (current: ImagesInfo, diffs: ImagesInfo) => any) {
         return this.imagesCollection().onSnapshot(snapshot => {
-            const data = (snapshot.docs as ImageSnapshot[]).reduce(
-                (docs, doc) => ({ ...docs, [doc.id]: doc.get("t").seconds }),
+            const current = (snapshot.docs as ImageSnapshot[]).reduce(
+                (docs, doc) => ({
+                    ...docs,
+                    [doc.id]: this.convertImageInfo(doc),
+                }),
                 {} as ImagesInfo,
             );
-            listener(data);
+            const diffs = snapshot
+                .docChanges()
+                .filter(diff => diff.type === "modified")
+                .reduce(
+                    (docs, diff) => ({
+                        ...docs,
+                        [diff.doc.id]: this.convertImageInfo(diff.doc as ImageSnapshot),
+                    }),
+                    {} as ImagesInfo,
+                );
+            listener(current, diffs);
         });
     }
 
@@ -91,14 +133,10 @@ export class ImageStorage {
             .onSnapshot(snapshot => {
                 const result = (snapshot.docs as MessageSnapshot[]).map<Message>(doc => {
                     const data = doc.data();
-                    const values = [];
-                    for (let i = 0; i < this.config.values.length; ++i) {
-                        values[i] = data.values[i];
-                    }
                     return {
                         ...data,
                         id: doc.id,
-                        values,
+                        values: hashToArray(data.values, this.config.values.length),
                     };
                 });
                 listener(result);
@@ -109,16 +147,13 @@ export class ImageStorage {
         await this.imageRef(index).put(file);
         await this.imagesCollection()
             .doc(`${index}`)
-            .set({ t: firebase.firestore.FieldValue.serverTimestamp() });
+            .set({ t: firebase.firestore.FieldValue.serverTimestamp(), values: arrayToHash(values) });
         const { uid } = firebase.auth().currentUser!;
         const id = await sha256(`${values.join("\t")}\t${uid}`);
         await this.messagesCollection()
             .doc(id)
             .set({
-                values: values.reduce(
-                    (valuesHash, value, i) => ({ ...valuesHash, [i]: value || "" }),
-                    {} as { [index: string]: string },
-                ),
+                values: arrayToHash(values),
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 uid,
             });

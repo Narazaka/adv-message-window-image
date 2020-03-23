@@ -1,6 +1,9 @@
 import * as React from "react";
 import { Grid, Image } from "semantic-ui-react";
+import * as iziToastAll from "izitoast";
 import { ImageStorage, ImagesInfo } from "../ImageStorage";
+
+const iziToast = (iziToastAll as any) as typeof iziToastAll.default;
 
 const imageStyle: React.CSSProperties = {
     border: "5px solid #ffffff",
@@ -30,7 +33,20 @@ export const ImageList: React.FC<ImageListProps> = function ImageList({ index, s
         });
     }, []);
     React.useEffect(() => {
-        return imageStorage.listenImages(info => setImagesInfo(info));
+        return imageStorage.listenImages((current, diffs) => {
+            setImagesInfo(current);
+            // eslint-disable-next-line no-restricted-syntax
+            for (const i of Object.keys(diffs)) {
+                iziToast.show({
+                    title: `${Number(i) + 1}番目の画像が更新されました`,
+                    message: `${diffs[i].values.join("\n")}`,
+                    position: "topRight",
+                    timeout: 4000,
+                    progressBar: false,
+                    color: "yellow",
+                });
+            }
+        });
     }, []);
     React.useEffect(() => {
         if (saved) {
@@ -45,9 +61,9 @@ export const ImageList: React.FC<ImageListProps> = function ImageList({ index, s
                 <Grid.Column key={i}>
                     <Image
                         // eslint-disable-next-line react/no-array-index-key
-                        key={(imagesInfo[i] || keyOffset) + i}
+                        key={(imagesInfo[i]?.t || keyOffset) + i}
                         label={{ floating: true, content: `${i + 1}`, color: i === index ? "blue" : undefined }}
-                        src={`${imageUrl}&dummy=${imagesInfo[i] || keyOffset}`}
+                        src={`${imageUrl}&dummy=${imagesInfo[i]?.t || keyOffset}`}
                         style={i === index ? selectedImage : imageStyle}
                         onClick={() => setIndex(i)}
                     />
