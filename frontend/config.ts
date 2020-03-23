@@ -1,9 +1,9 @@
 import { Configuration } from "./Configuration";
 
 export const config: Configuration = {
+    name: "adv-message-window-image",
     baseImages: ["./message-window.png"],
     imageCount: 40,
-    imageNamePrefix: "adv-message-window-image-",
     values: [
         {
             type: "text",

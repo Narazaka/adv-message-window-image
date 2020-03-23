@@ -2,7 +2,7 @@ import * as firebase from "firebase/app";
 import { config } from "./config";
 
 export function imageName(index: number) {
-    return `${config.imageNamePrefix}${index}.png`;
+    return `${config.name}-${index}.png`;
 }
 
 export function imageRef(index: number) {
@@ -44,7 +44,7 @@ export interface Message {
 }
 
 function messagesCollection() {
-    return firebase.firestore().collection("adv-message-window-image");
+    return firebase.firestore().collection(config.name);
 }
 
 export type MessageSnapshot = firebase.firestore.QueryDocumentSnapshot<StoredMessage>;
