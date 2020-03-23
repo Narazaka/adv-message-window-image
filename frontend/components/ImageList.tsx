@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Grid, Image } from "semantic-ui-react";
-import { ImageStorage } from "../ImageStorage";
+import { ImageStorage, ImagesInfo } from "../ImageStorage";
 
 const imageStyle: React.CSSProperties = {
     border: "5px solid #ffffff",
@@ -23,10 +23,14 @@ export interface ImageListProps {
 export const ImageList: React.FC<ImageListProps> = function ImageList({ index, setIndex, saved, imageStorage }) {
     const [imageUrls, setImageUrls] = React.useState<string[]>([]);
     const [keyOffset, setKeyOffset] = React.useState(new Date().getTime());
+    const [imagesInfo, setImagesInfo] = React.useState<ImagesInfo>({});
     React.useEffect(() => {
         imageStorage.getImageUrls().then(urls => {
             setImageUrls(urls);
         });
+    }, []);
+    React.useEffect(() => {
+        return imageStorage.listenImages(info => setImagesInfo(info));
     }, []);
     React.useEffect(() => {
         if (saved) {
@@ -41,9 +45,9 @@ export const ImageList: React.FC<ImageListProps> = function ImageList({ index, s
                 <Grid.Column key={i}>
                     <Image
                         // eslint-disable-next-line react/no-array-index-key
-                        key={keyOffset + i}
+                        key={(imagesInfo[i] || keyOffset) + i}
                         label={{ floating: true, content: `${i + 1}`, color: i === index ? "blue" : undefined }}
-                        src={`${imageUrl}&dummy=${keyOffset + i}`}
+                        src={`${imageUrl}&dummy=${imagesInfo[i] || keyOffset}`}
                         style={i === index ? selectedImage : imageStyle}
                         onClick={() => setIndex(i)}
                     />

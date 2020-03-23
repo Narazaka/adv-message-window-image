@@ -21,27 +21,13 @@ export const Messages: React.FC<MessagesProps> = function Messages({ user, saved
     const [tryDelete, setTryDelete] = React.useState<string | undefined>();
 
     React.useEffect(() => {
-        if (user && saved) {
-            imageStorage.getAllMessages().then(msgs => setMessages(msgs));
-        }
-    }, [saved]);
-
-    React.useEffect(() => {
-        if (user) {
-            imageStorage.getAllMessages().then(msgs => setMessages(msgs));
-        }
-    }, [user]);
+        return imageStorage.listenAllMessages(msgs => setMessages(msgs));
+    }, []);
 
     React.useEffect(() => {
         if (tryDelete) {
             const id = tryDelete;
-            imageStorage
-                .deleteMessage(id)
-                .then(() => imageStorage.getAllMessages())
-                .then(msgs => {
-                    setMessages(msgs);
-                    setTryDelete(undefined);
-                });
+            imageStorage.deleteMessage(id).then(() => setTryDelete(undefined));
         }
     }, [tryDelete]);
 
