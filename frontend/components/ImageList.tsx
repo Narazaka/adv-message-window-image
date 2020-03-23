@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Grid, Image } from "semantic-ui-react";
-import { getImageUrls } from "../ImageStorage";
+import { ImageStorage } from "../ImageStorage";
 
 const imageStyle: React.CSSProperties = {
     border: "5px solid #ffffff",
@@ -17,13 +17,14 @@ export interface ImageListProps {
     index: number;
     setIndex: (value: number) => any;
     saved: boolean;
+    imageStorage: ImageStorage;
 }
 
-export const ImageList: React.FC<ImageListProps> = function ImageList({ index, setIndex, saved }) {
+export const ImageList: React.FC<ImageListProps> = function ImageList({ index, setIndex, saved, imageStorage }) {
     const [imageUrls, setImageUrls] = React.useState<string[]>([]);
     const [keyOffset, setKeyOffset] = React.useState(new Date().getTime());
     React.useEffect(() => {
-        getImageUrls().then(urls => {
+        imageStorage.getImageUrls().then(urls => {
             setImageUrls(urls);
         });
     }, []);

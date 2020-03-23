@@ -1,16 +1,17 @@
 import * as React from "react";
 import { Grid, Form, Pagination, Button } from "semantic-ui-react";
-import { getAllMessages, deleteMessage, Message } from "../ImageStorage";
+import { Message, ImageStorage } from "../ImageStorage";
 
 export interface MessagesProps {
     user: firebase.User | null;
     saved: boolean;
     setValues: (values: string[]) => any;
+    imageStorage: ImageStorage;
 }
 
 const pagePer = 12;
 
-export const Messages: React.FC<MessagesProps> = function Messages({ user, saved, setValues }) {
+export const Messages: React.FC<MessagesProps> = function Messages({ user, saved, setValues, imageStorage }) {
     const [filterMine, toggleFilterMine] = React.useReducer((prev: boolean) => !prev, false);
     const [search, setSearch] = React.useState("");
     const [messages, setMessages] = React.useState<Message[]>([]);
@@ -21,21 +22,22 @@ export const Messages: React.FC<MessagesProps> = function Messages({ user, saved
 
     React.useEffect(() => {
         if (user && saved) {
-            getAllMessages().then(msgs => setMessages(msgs));
+            imageStorage.getAllMessages().then(msgs => setMessages(msgs));
         }
     }, [saved]);
 
     React.useEffect(() => {
         if (user) {
-            getAllMessages().then(msgs => setMessages(msgs));
+            imageStorage.getAllMessages().then(msgs => setMessages(msgs));
         }
     }, [user]);
 
     React.useEffect(() => {
         if (tryDelete) {
             const id = tryDelete;
-            deleteMessage(id)
-                .then(() => getAllMessages())
+            imageStorage
+                .deleteMessage(id)
+                .then(() => imageStorage.getAllMessages())
                 .then(msgs => {
                     setMessages(msgs);
                     setTryDelete(undefined);

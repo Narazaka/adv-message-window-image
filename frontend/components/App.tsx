@@ -6,8 +6,12 @@ import { ImageList } from "./ImageList";
 import { AccountButton } from "./AccountButton";
 import { Messages } from "./Messages";
 import { ImageGenerateForm } from "./ImageGenerateForm";
+import { ImageStorage } from "../ImageStorage";
+import { config } from "../config";
 
 const worldUrl = "vrchat://launch?ref=vrchat.com&id=wrld_61996a4b-c96c-4688-bc98-39224491a8b0:0";
+
+const imageStorage = new ImageStorage(config);
 
 export const App: React.FC = function App() {
     const [values, setValues] = React.useState<string[]>([]);
@@ -50,16 +54,26 @@ export const App: React.FC = function App() {
                                 menuItem: "履歴",
                                 pane: (
                                     <Tab.Pane key="history">
-                                        <Messages user={user} saved={saved} setValues={setValues} />
+                                        <Messages
+                                            user={user}
+                                            saved={saved}
+                                            setValues={setValues}
+                                            imageStorage={imageStorage}
+                                        />
                                     </Tab.Pane>
                                 ),
                             },
                         ]}
                     />
-                    <ImageGenerateForm index={index} onSaved={() => setSaved(true)} values={values} />
+                    <ImageGenerateForm
+                        index={index}
+                        onSaved={() => setSaved(true)}
+                        values={values}
+                        imageStorage={imageStorage}
+                    />
                 </>
             )}
-            <ImageList index={index} setIndex={setIndex} saved={saved} />
+            <ImageList index={index} setIndex={setIndex} saved={saved} imageStorage={imageStorage} />
             <p>
                 このメーカーで生成した画像はパブリックドメインになります。このメーカーではVL Pゴシックを利用しています。
                 <a href="http://vlgothic.dicey.org/license.html">フォントのライセンス</a>

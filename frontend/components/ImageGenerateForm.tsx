@@ -3,7 +3,7 @@ import * as Jimp from "jimp";
 import { useDebounce } from "use-debounce";
 import { Button, Loader, Form, Image, Segment, Dimmer } from "semantic-ui-react";
 import { GenerateMessageWindow } from "../GenerateMessageWindow";
-import { saveImage } from "../ImageStorage";
+import { ImageStorage } from "../ImageStorage";
 import { config } from "../config";
 
 const gen = new GenerateMessageWindow(config);
@@ -12,12 +12,14 @@ export interface ImageGenerateFormProps {
     values: string[];
     index: number;
     onSaved: () => any;
+    imageStorage: ImageStorage;
 }
 
 export const ImageGenerateForm: React.FC<ImageGenerateFormProps> = function ImageGenerateForm({
     values: valuesInput,
     index,
     onSaved,
+    imageStorage,
 }) {
     const [loaded, setLoaded] = React.useState(gen.loaded);
     const [values] = useDebounce(valuesInput, 400);
@@ -41,7 +43,7 @@ export const ImageGenerateForm: React.FC<ImageGenerateFormProps> = function Imag
         if (trySave && image) {
             image
                 .getBufferAsync("image/png")
-                .then(file => saveImage({ index, file, values }))
+                .then(file => imageStorage.saveImage({ index, file, values }))
                 .then(() => {
                     setTrySave(false);
                     onSaved();
