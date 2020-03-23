@@ -6,7 +6,7 @@ import { Configuration } from "./Configuration";
 export class GenerateMessageWindow {
     config: Configuration;
 
-    base!: Jimp;
+    bases!: Jimp[];
 
     font!: Font;
 
@@ -26,7 +26,7 @@ export class GenerateMessageWindow {
     }
 
     private async loadBase() {
-        this.base = await Jimp.read(this.config.baseImages[0]);
+        this.bases = await Promise.all(this.config.baseImages.map(baseImage => Jimp.read(baseImage)));
     }
 
     private async loadFont() {
@@ -34,12 +34,12 @@ export class GenerateMessageWindow {
         this.fontHeight = Jimp.measureTextHeight(this.font, "田", 100);
     }
 
-    cloneBase() {
-        return this.base.clone();
+    cloneBase(index: number) {
+        return this.bases[index].clone();
     }
 
     generate(values: string[]) {
-        const canvas = this.cloneBase();
+        const canvas = this.cloneBase(0);
         for (let j = 0; j < this.config.values.length; ++j) {
             const valueConfig = this.config.values[j];
             const value = values[j];
