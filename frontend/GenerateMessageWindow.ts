@@ -26,7 +26,7 @@ export class GenerateMessageWindow {
     }
 
     private async loadBase() {
-        this.bases = await Promise.all(this.config.baseImages.map(baseImage => Jimp.read(baseImage)));
+        this.bases = await Promise.all(this.config.baseImages.map(baseImage => Jimp.read(baseImage.path)));
     }
 
     private async loadFont() {
@@ -39,9 +39,10 @@ export class GenerateMessageWindow {
     }
 
     generate(values: string[]) {
-        const canvas = this.cloneBase(0);
+        const baseImageIndex = 0;
+        const canvas = this.cloneBase(baseImageIndex);
         for (let j = 0; j < this.config.values.length; ++j) {
-            const valueConfig = this.config.values[j];
+            const valueConfig = this.config.baseImages[baseImageIndex].values[j];
             const value = values[j];
             // eslint-disable-next-line no-continue
             if (!value) continue;
