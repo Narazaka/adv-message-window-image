@@ -1,6 +1,7 @@
 export interface Configuration {
     values: ValueConfig[];
     baseImages: string[];
+    imageNamePrefix: string;
     imageCount: number;
 }
 

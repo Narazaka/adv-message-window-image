@@ -2,7 +2,7 @@ import * as firebase from "firebase/app";
 import { config } from "./config";
 
 export function imageName(index: number) {
-    return `adv-message-window-image-${index}.png`;
+    return `${config.imageNamePrefix}${index}.png`;
 }
 
 export function imageRef(index: number) {
