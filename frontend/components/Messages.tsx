@@ -6,12 +6,19 @@ export interface MessagesProps {
     user: firebase.User | null;
     saved: boolean;
     setValues: (values: string[]) => any;
+    setBaseImageIndex: (value: number) => any;
     imageStorage: ImageStorage;
 }
 
 const pagePer = 9;
 
-export const Messages: React.FC<MessagesProps> = function Messages({ user, saved, setValues, imageStorage }) {
+export const Messages: React.FC<MessagesProps> = function Messages({
+    user,
+    saved,
+    setValues,
+    setBaseImageIndex,
+    imageStorage,
+}) {
     const [filterMine, toggleFilterMine] = React.useReducer((prev: boolean) => !prev, false);
     const [search, setSearch] = React.useState("");
     const [messages, setMessages] = React.useState<Message[]>([]);
@@ -75,7 +82,14 @@ export const Messages: React.FC<MessagesProps> = function Messages({ user, saved
                                     // eslint-disable-next-line react/no-array-index-key
                                     <p key={i}>{value}</p>
                                 ))}
-                                <Button primary type="button" onClick={() => setValues(message.values)}>
+                                <Button
+                                    primary
+                                    type="button"
+                                    onClick={() => {
+                                        setValues(message.values);
+                                        setBaseImageIndex(message.baseImageIndex);
+                                    }}
+                                >
                                     反映
                                 </Button>
                                 {user.uid === message.uid && (

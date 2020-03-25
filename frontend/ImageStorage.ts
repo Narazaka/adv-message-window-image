@@ -4,12 +4,14 @@ import { Configuration } from "./Configuration";
 export interface StoredMessage {
     values: { [index: string]: string };
     timestamp: firebase.firestore.Timestamp;
+    baseImageIndex?: number;
     uid: string;
 }
 
 export interface Message {
     id: string;
     values: string[];
+    baseImageIndex: number;
     timestamp: firebase.firestore.Timestamp;
     uid: string;
 }
@@ -137,13 +139,24 @@ export class ImageStorage {
                         ...data,
                         id: doc.id,
                         values: hashToArray(data.values, this.config.values.length),
+                        baseImageIndex: data.baseImageIndex || 0,
                     };
                 });
                 listener(result);
             });
     }
 
-    async saveImage({ index, file, values }: { index: number; file: Buffer; values: string[] }) {
+    async saveImage({
+        index,
+        file,
+        values,
+        baseImageIndex,
+    }: {
+        index: number;
+        file: Buffer;
+        values: string[];
+        baseImageIndex: number;
+    }) {
         await this.imageRef(index).put(file);
         await this.imagesCollection()
             .doc(`${index}`)
@@ -154,6 +167,7 @@ export class ImageStorage {
             .doc(id)
             .set({
                 values: arrayToHash(values),
+                baseImageIndex,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 uid,
             });

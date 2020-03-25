@@ -5,15 +5,15 @@ import { config } from "../config";
 export interface EditFormProps {
     values: string[];
     setValue: (index: number, value: string) => any;
-    imageBaseIndex: number;
-    setImageBaseIndex: (value: number) => any;
+    baseImageIndex: number;
+    setBaseImageIndex: (value: number) => any;
 }
 
 export const EditForm: React.FC<EditFormProps> = function EditForm({
     values,
     setValue,
-    imageBaseIndex,
-    setImageBaseIndex,
+    baseImageIndex,
+    setBaseImageIndex,
 }) {
     return (
         <>
@@ -51,9 +51,9 @@ export const EditForm: React.FC<EditFormProps> = function EditForm({
                             key={imageIndex}
                             label={baseImage.name}
                             value={imageIndex}
-                            checked={imageIndex === imageBaseIndex}
+                            checked={imageIndex === baseImageIndex}
                             // eslint-disable-next-line no-shadow
-                            onChange={(_, { value }) => setImageBaseIndex(Number(value))}
+                            onChange={(_, { value }) => setBaseImageIndex(Number(value))}
                         />
                     ))}
                 </Form.Group>

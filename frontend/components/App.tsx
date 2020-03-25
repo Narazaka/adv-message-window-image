@@ -23,7 +23,7 @@ export const App: React.FC = function App() {
         },
         [values],
     );
-    const [imageBaseIndex, setImageBaseIndex] = React.useState(0);
+    const [baseImageIndex, setBaseImageIndex] = React.useState(0);
     const [index, setIndex] = React.useState(0);
     const [saved, setSaved] = React.useState(false);
     const [user, setUser] = React.useState(firebase.auth().currentUser);
@@ -65,8 +65,8 @@ export const App: React.FC = function App() {
                                         <EditForm
                                             values={values}
                                             setValue={setValue}
-                                            imageBaseIndex={imageBaseIndex}
-                                            setImageBaseIndex={setImageBaseIndex}
+                                            baseImageIndex={baseImageIndex}
+                                            setBaseImageIndex={setBaseImageIndex}
                                         />
                                     </Tab.Pane>
                                 ),
@@ -79,6 +79,7 @@ export const App: React.FC = function App() {
                                             user={user}
                                             saved={saved}
                                             setValues={setValues}
+                                            setBaseImageIndex={setBaseImageIndex}
                                             imageStorage={imageStorage}
                                         />
                                     </Tab.Pane>
@@ -90,7 +91,7 @@ export const App: React.FC = function App() {
                         index={index}
                         onSaved={() => setSaved(true)}
                         values={values}
-                        imageBaseIndex={imageBaseIndex}
+                        baseImageIndex={baseImageIndex}
                         imageStorage={imageStorage}
                     />
                 </>

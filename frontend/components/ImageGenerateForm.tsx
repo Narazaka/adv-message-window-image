@@ -10,7 +10,7 @@ const gen = new GenerateMessageWindow(config);
 
 export interface ImageGenerateFormProps {
     values: string[];
-    imageBaseIndex: number;
+    baseImageIndex: number;
     index: number;
     onSaved: () => any;
     imageStorage: ImageStorage;
@@ -18,7 +18,7 @@ export interface ImageGenerateFormProps {
 
 export const ImageGenerateForm: React.FC<ImageGenerateFormProps> = function ImageGenerateForm({
     values: valuesInput,
-    imageBaseIndex,
+    baseImageIndex,
     index,
     onSaved,
     imageStorage,
@@ -34,8 +34,8 @@ export const ImageGenerateForm: React.FC<ImageGenerateFormProps> = function Imag
             gen.load((loadedCount, allCount) => setLoadCounts([loadedCount, allCount])).then(() => setLoaded(true));
     }, []);
     React.useEffect(() => {
-        if (loaded) setImage(gen.generate(imageBaseIndex, values));
-    }, [imageBaseIndex, values, loaded]);
+        if (loaded) setImage(gen.generate(baseImageIndex, values));
+    }, [baseImageIndex, values, loaded]);
     React.useEffect(() => {
         if (image) {
             image.getBase64Async("image/png").then(img => setImageUrl(img));
@@ -47,7 +47,7 @@ export const ImageGenerateForm: React.FC<ImageGenerateFormProps> = function Imag
         if (trySave && image) {
             image
                 .getBufferAsync("image/png")
-                .then(file => imageStorage.saveImage({ index, file, values }))
+                .then(file => imageStorage.saveImage({ index, file, values, baseImageIndex }))
                 .then(() => {
                     setTrySave(false);
                     onSaved();
