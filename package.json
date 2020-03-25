@@ -8,7 +8,10 @@
     "build": "webpack",
     "watch": "webpack -w",
     "firebase:deploy": "firebase deploy",
-    "deploy": "npm-run-all build:production firebase:deploy"
+    "deploy": "npm-run-all build:production firebase:deploy",
+    "png:minify": "npm-run-all png:pngquant png:advpng",
+    "png:pngquant": "pngquant --speed 1 --strip --ext .png --force public/*.png public/**/*.png",
+    "png:advpng": "advpng -z -4 -i 10 public/*.png public/**/*.png"
   },
   "keywords": [],
   "author": "",
