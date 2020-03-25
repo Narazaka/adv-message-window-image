@@ -3,6 +3,7 @@ export interface Configuration {
     values: ValueConfig[];
     baseImages: BaseImageConfig[];
     imageCount: number;
+    fonts: { [name: string]: string };
 }
 
 export interface ValueConfig {
@@ -12,6 +13,7 @@ export interface ValueConfig {
 
 export interface BaseImageConfig {
     path: string;
+    name: string;
     values: ValuePositionConfig[];
 }
 
@@ -21,4 +23,5 @@ export interface ValuePositionConfig {
         y: number;
     };
     maxWidth: number;
+    fonts: string[];
 }

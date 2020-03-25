@@ -23,6 +23,7 @@ export const App: React.FC = function App() {
         },
         [values],
     );
+    const [imageBaseIndex, setImageBaseIndex] = React.useState(0);
     const [index, setIndex] = React.useState(0);
     const [saved, setSaved] = React.useState(false);
     const [user, setUser] = React.useState(firebase.auth().currentUser);
@@ -36,6 +37,21 @@ export const App: React.FC = function App() {
             <p>
                 VRChatワールド <a href={worldUrl}>美少女ゲームツクール2020 ⁄ ADV-MAKER 2020</a> に表示されます。
             </p>
+            <p>
+                このメーカーで生成した画像はパブリックドメインになります。このメーカーではVL Pゴシックを利用しています。
+                <a href="http://vlgothic.dicey.org/license.html" target="_blank" rel="noopener noreferrer">
+                    フォントのライセンス
+                </a>
+            </p>
+            <p>
+                ベース画像「Farewell school」の素材は
+                <strong>
+                    <a href="https://kopacurve.blog.fc2.com/" target="_blank" rel="noopener noreferrer">
+                        空想曲線
+                    </a>
+                </strong>
+                のものを加工して使用しています。
+            </p>
             <AccountButton user={user} setUser={setUser} />
             {!!user && (
                 <>
@@ -46,7 +62,12 @@ export const App: React.FC = function App() {
                                 menuItem: "編集",
                                 pane: (
                                     <Tab.Pane key="edit">
-                                        <EditForm values={values} setValue={setValue} />
+                                        <EditForm
+                                            values={values}
+                                            setValue={setValue}
+                                            imageBaseIndex={imageBaseIndex}
+                                            setImageBaseIndex={setImageBaseIndex}
+                                        />
                                     </Tab.Pane>
                                 ),
                             },
@@ -69,15 +90,12 @@ export const App: React.FC = function App() {
                         index={index}
                         onSaved={() => setSaved(true)}
                         values={values}
+                        imageBaseIndex={imageBaseIndex}
                         imageStorage={imageStorage}
                     />
                 </>
             )}
             <ImageList index={index} setIndex={setIndex} saved={saved} imageStorage={imageStorage} />
-            <p>
-                このメーカーで生成した画像はパブリックドメインになります。このメーカーではVL Pゴシックを利用しています。
-                <a href="http://vlgothic.dicey.org/license.html">フォントのライセンス</a>
-            </p>
         </Container>
     );
 };
