@@ -14,8 +14,8 @@ export const config: Configuration = {
     ],
     fonts: {
         vlPGothic32: "./vl_pgothic_white/vl_pgothic.fnt",
-        vl_pgothic_farewell_school_title: "./vl_pgothic_farewell_school_title/vl_pgothic.fnt",
-        vl_pgothic_farewell_school_body: "./vl_pgothic_farewell_school_body/vl_pgothic.fnt",
+        farewell_school_title: "./farewell_school_title/azukip_30.fnt",
+        farewell_school_body: "./farewell_school_body/azukip_30.fnt",
     },
     baseImages: [
         {
@@ -50,15 +50,15 @@ export const config: Configuration = {
                         y: 23,
                     },
                     maxWidth: 880,
-                    fonts: ["vl_pgothic_farewell_school_title"],
+                    fonts: ["farewell_school_title"],
                 },
                 {
                     origin: {
-                        x: 65,
+                        x: 50,
                         y: 80,
                     },
-                    maxWidth: 820,
-                    fonts: ["vl_pgothic_farewell_school_body"],
+                    maxWidth: 850,
+                    fonts: ["farewell_school_body"],
                 },
             ],
         },

@@ -38,10 +38,15 @@ export const App: React.FC = function App() {
                 VRChatワールド <a href={worldUrl}>美少女ゲームツクール2020 ⁄ ADV-MAKER 2020</a> に表示されます。
             </p>
             <p>
-                このメーカーで生成した画像はパブリックドメインになります。このメーカーではVL Pゴシックを利用しています。
+                このメーカーで生成した画像はパブリックドメインになります。このメーカーでは
                 <a href="http://vlgothic.dicey.org/license.html" target="_blank" rel="noopener noreferrer">
-                    フォントのライセンス
+                    VL Pゴシック
                 </a>
+                ・
+                <a href="http://azukifont.com/font/azuki.html" target="_blank" rel="noopener noreferrer">
+                    あずきフォント
+                </a>
+                を利用しています。
             </p>
             <p>
                 ベース画像「Farewell school」の素材は

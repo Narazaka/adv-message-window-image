@@ -13,8 +13,8 @@
     "png:pngquant": "pngquant --speed 1 --strip --ext .png --force public/*.png public/**/*.png",
     "png:advpng": "advpng -z -4 -i 10 public/*.png public/**/*.png",
     "convfont": "npm-run-all convfont:farewell_school_title convfont:farewell_school_body",
-    "convfont:farewell_school_title": "node scripts/convert_color.js public/vl_pgothic_white_30 public/vl_pgothic_farewell_school_title vl_pgothic.fnt 255 186 179",
-    "convfont:farewell_school_body": "node scripts/convert_color.js public/vl_pgothic_white_30 public/vl_pgothic_farewell_school_body vl_pgothic.fnt 119 102 102"
+    "convfont:farewell_school_title": "node scripts/convert_color.js public/azukip_30 public/farewell_school_title azukip_30.fnt 255 186 179",
+    "convfont:farewell_school_body": "node scripts/convert_color.js public/azukip_30 public/farewell_school_body azukip_30.fnt 119 102 102"
   },
   "keywords": [],
   "author": "",
